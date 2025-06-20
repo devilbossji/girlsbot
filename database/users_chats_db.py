@@ -19,11 +19,15 @@ class Database:
         self.codes = self.db.codes
         self.connection = self.db.connections
 
-    async def find_join_req(self, id):
-        return bool(await self.req.find_one({'id': id})) 
-     
-    async def add_join_req(self, id):
-        await self.req.insert_one({'id': id})
+    async def add_join_req(self, user_id, channel_id):
+        await self.req.update_one(
+            {"id": user_id, "channel_id": channel_id},
+            {"$set": {"id": user_id, "channel_id": channel_id}},
+            upsert=True
+        )
+        
+    async def find_join_req(self, user_id, channel_id):
+        return bool(await self.req.find_one({'id': user_id, 'channel_id': channel_id}))
 
     async def del_join_req(self):
         await self.req.drop()

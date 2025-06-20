@@ -54,7 +54,7 @@ class temp(object):
     VERIFICATIONS = {}
 
 async def is_req_subscribed(bot, query):
-    if await db.find_join_req(query.from_user.id):
+    if await db.find_join_req(query.from_user.id, AUTH_CHANNEL):
         return True
     try:
         user = await bot.get_chat_member(AUTH_CHANNEL, query.from_user.id)
